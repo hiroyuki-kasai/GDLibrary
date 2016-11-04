@@ -11,16 +11,16 @@ Introduction
 ----------
 The GDLibrary is a **pure-Matlab** library of a collection of **unconstrained optimization algorithms**. This solves an unconstrained minimization problem of the form, min f(x).
 
+Note that the [SGDLibrary](https://github.com/hiroyuki-kasai/SGDLibrary) internally contains this GDLibrary.
 
-
-List of algorithms available in GDLibrary
+List of gradient algorithms available in GDLibrary
 ---------
 - **GD** (gradient descent)
 - **CG** (linear conjugate gradient)
 - **NCG** (non-linear conjugate gradient)
 - **Newton** (Netwon's algorithm)
 - **BFGS**
-- **LBFGS** (Limited-memory BFGS)
+- **LBFGS** (limited-memory BFGS)
 
 List of line-search algorithms available in GDLibrary
 ---------
@@ -43,19 +43,19 @@ Folders and files
 ---------
 
 - run_me_first.m
-    - The scipt that you need to run first.
+    - The script that you need to run first.
 
 - demo.m
-    - A demonstration scipt to check and understand this package easily. 
+    - A demonstration script to check and understand this package easily. 
                       
-- solver
+- gd_solver
     - Contains various stochastic optimization algorithms.
 
 - problem
-    - Condins definition files to be solved.
+    - Problem definition files to be solved.
 
-- test
-    - Some helpful test test scipts to use this package.
+- gd_test
+    - Some helpful test script to use this package.
 
 - plotter
     - Contains plotting tools to show convergence results and various plots.
