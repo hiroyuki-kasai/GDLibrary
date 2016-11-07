@@ -25,6 +25,7 @@ List of gradient algorithms available in GDLibrary
     - Damped Newton
     - Cholesky factorizaion based Newton
 - **BFGS**
+    - Damped BFGS
 - **LBFGS** (limited-memory BFGS)
 
 List of line-search algorithms available in GDLibrary
