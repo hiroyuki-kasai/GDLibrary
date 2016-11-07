@@ -48,26 +48,26 @@ Folders and files
 - demo.m
     - A demonstration script to check and understand this package easily. 
                       
-- gd_solver
+- gd_solver/
     - Contains various stochastic optimization algorithms.
 
-- problem
+- problem/
     - Problem definition files to be solved.
 
-- gd_test
+- gd_test/
     - Some helpful test script to use this package.
 
-- plotter
+- plotter/
     - Contains plotting tools to show convergence results and various plots.
                   
-- tool
+- tool/
     - Some utility tools for this project.
                   
                               
 
 First to do
 ----------------------------
-Run the setup script "**run_me_first.m**" for path configurations. 
+Run `run_me_first` for path configurations. 
 ```Matlab
 %% First run the setup script
 run_me_first; 
@@ -75,7 +75,7 @@ run_me_first;
 
 Usage example (Rosenbrock problem)
 ----------------------------
-Now, you just execute "**demo.m**" for demonstration of this package.
+Now, just execute `demo` for demonstration of this package.
 ```Matlab
 %% Execute the demonstration script
 demo; 
