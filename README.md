@@ -43,7 +43,7 @@ Supported problems
 * Linear SVM
 * Logistic regression
 * Softmax classification (multinomial logistic regression)
-* General problem
+* General form problem
 
 Folders and files
 ---------
