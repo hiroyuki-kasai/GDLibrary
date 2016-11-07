@@ -16,9 +16,14 @@ Note that the [SGDLibrary](https://github.com/hiroyuki-kasai/SGDLibrary) interna
 List of gradient algorithms available in GDLibrary
 ---------
 - **GD** (gradient descent)
+    -- Scaled GD
 - **CG** (linear conjugate gradient)
+    -- Preconditioned CG
 - **NCG** (non-linear conjugate gradient)
+    -- Fletcher?Reeves (FR), Polak?Ribi?re (PR)
 - **Newton** (Netwon's algorithm)
+    -- Damped Newton
+    -- Cholesky factorizaion based Newton
 - **BFGS**
 - **LBFGS** (limited-memory BFGS)
 
