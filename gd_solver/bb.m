@@ -74,9 +74,12 @@ function [w, infos] = bb(problem, options)
     infos.cost = f_val;     
     optgap = f_val - f_opt;
     infos.optgap = optgap;
-    grad = problem.grad(w);
+    grad = problem.full_grad(w);
     gnorm = norm(grad);
     infos.gnorm = gnorm;
+    if isfield(problem, 'reg')
+        infos.reg = problem.reg(w);   
+    end  
     if store_w
         infos.w = w;       
     end
@@ -85,7 +88,12 @@ function [w, infos] = bb(problem, options)
     p = - grad; 
     
     % set start time
-    start_time = tic();    
+    start_time = tic(); 
+    
+    % print info
+    if verbose
+        fprintf('BB: Iter = %03d, cost = %.16e, gnorm = %.4e, optgap = %.4e\n', iter, f_val, gnorm, optgap);
+    end      
 
     % main loop
     while (optgap > tol_optgap) && (gnorm > tol_gnorm) && (iter < max_iter)        
@@ -146,18 +154,13 @@ function [w, infos] = bb(problem, options)
        
             % update w
             w = w + step * p;            
-            
         end
-
-%         if iter > 0
-%             y = glad - grad_old;
-%             step = -step * (grad_old' * y) ./ (y' * y);            
-%         end
-%         
-%         grad_old = grad; 
-%         w = w - step * grad;
-
         
+        % proximal operator
+        if isfield(problem, 'prox')
+            w = problem.prox(w, step);
+        end           
+
         % calculate gradient        
         glad = problem.full_grad(w); 
         
@@ -178,7 +181,11 @@ function [w, infos] = bb(problem, options)
         infos.grad_calc_count = [infos.grad_calc_count iter*n];      
         infos.optgap = [infos.optgap optgap];        
         infos.cost = [infos.cost f_val];
-        infos.gnorm = [infos.gnorm gnorm]; 
+        infos.gnorm = [infos.gnorm gnorm];
+        if isfield(problem, 'reg')
+            reg = problem.reg(w);
+            infos.reg = [infos.reg reg];
+        end  
         if store_w
             infos.w = [infos.w w];         
         end        

@@ -22,7 +22,7 @@ function [w, infos] = lbfgs(problem, options)
 % This file is part of GDLibrary.
 %
 % Created by H.Kasai on Feb. 15, 2016
-% Modified by H.Kasai on Oct. 25, 2016
+% Modified by H.Kasai on Mar. 16, 2017
 
 
     % set dimensions and samples
@@ -91,6 +91,15 @@ function [w, infos] = lbfgs(problem, options)
     else
         mem_size = options.mem_size;
     end
+
+    if ~isfield(options, 'step_init_alg')
+        % Do nothing
+    else
+        if strcmp(options.step_init_alg, 'bb_init')
+            % initialize by BB step-size
+            step_init = bb_init(problem, w);
+        end
+    end 
     
 
     % initialise
@@ -110,6 +119,9 @@ function [w, infos] = lbfgs(problem, options)
     grad = problem.full_grad(w);
     gnorm = norm(grad);
     infos.gnorm = gnorm;
+    if isfield(problem, 'reg')
+        infos.reg = problem.reg(w);   
+    end    
     if store_w
         infos.w = w;       
     end
@@ -125,7 +137,12 @@ function [w, infos] = lbfgs(problem, options)
     y_array = [];    
     
     % set start time
-    start_time = tic();    
+    start_time = tic();
+    
+    % print info
+    if verbose
+        fprintf('L-BFGS: Iter = %03d, cost = %.16e, gnorm = %.4e, optgap = %.4e\n', iter, f_val, gnorm, optgap);
+    end     
 
     % main loop
     while (optgap > tol_optgap) && (gnorm > tol_gnorm) && (iter < max_iter) && ~stopping     
@@ -151,23 +168,35 @@ function [w, infos] = lbfgs(problem, options)
             c1 = 1e-4;
             c2 = 0.9;
             step = strong_wolfe_line_search(problem, p, w, c1, c2);
+        elseif strcmp(step_alg, 'tfocs_backtracking') 
+            if iter > 0
+                alpha = 1.05;
+                beta = 0.5; 
+                step = tfocs_backtracking_search(step, w, w_old, grad, grad_old, alpha, beta);
+            else
+                step = step_init;
+            end
         else
         end
 
-        % store w and grad
-        w_old = w;        
-        glad_old = grad;        
 
-        % update w            
+        % update w      
+        w_old = w;  
         w = w + step * p;  
         
-        % calculate gradient        
-        glad = problem.full_grad(w);
+        % proximal operator
+        if isfield(problem, 'prox')
+            w = problem.prox(w, step);
+        end        
+        
+        % calculate gradient     
+        grad_old = grad; 
+        grad = problem.full_grad(w);
 
         % store cavature pair
         % 'y' curvature pair is calculated from gradient differencing
         s = w - w_old;
-        y = glad - glad_old;    
+        y = grad - grad_old;    
         s_array = [s_array s];
         y_array = [y_array y]; 
 
@@ -201,12 +230,16 @@ function [w, infos] = lbfgs(problem, options)
             infos.optgap = [infos.optgap optgap];        
             infos.cost = [infos.cost f_val];
             infos.gnorm = [infos.gnorm gnorm]; 
+            if isfield(problem, 'reg')
+                reg = problem.reg(w);
+                infos.reg = [infos.reg reg];
+            end            
             if store_w
                 infos.w = [infos.w w];         
             end  
         else
             w_corrupted = true;
-            w = infos.w(:,end);
+            w = w_old;
             stopping = true;            
         end
        

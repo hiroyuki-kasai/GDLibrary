@@ -11,7 +11,7 @@ function [w, infos] = gd(problem, options)
 % This file is part of GDLibrary and SGDLibrary.
 %
 % Created by H.Kasai on Feb. 15, 2016
-% Modified by H.Kasai on Nov. 01, 2016
+% Modified by H.Kasai on Apr. 17, 2017
 
 
     % set dimensions and samples
@@ -25,7 +25,7 @@ function [w, infos] = gd(problem, options)
     else
         step_init = options.step_init;
     end
-    step = step_init;
+    step = step_init;    
     
     if ~isfield(options, 'step_alg')
         step_alg = 'backtracking';
@@ -79,12 +79,22 @@ function [w, infos] = gd(problem, options)
         sub_mode = 'STANDARD';
     else
         sub_mode = options.sub_mode;
-    end  
+    end 
     
-
+    if ~isfield(options, 'step_init_alg')
+        % Do nothing
+    else
+        if strcmp(options.step_init_alg, 'bb_init')
+            % initialize by BB step-size
+            step_init = bb_init(problem, w);
+        end
+    end     
+   
     % initialise
     iter = 0;
-    S = eye(d);
+    if strcmp(step_alg, 'exact')
+        S = eye(d);
+    end
     
     % store first infos
     clear infos;
@@ -98,12 +108,24 @@ function [w, infos] = gd(problem, options)
     grad = problem.full_grad(w);
     gnorm = norm(grad);
     infos.gnorm = gnorm;
+    if isfield(problem, 'reg')
+        infos.reg = problem.reg(w);   
+    end    
     if store_w
         infos.w = w;       
     end
     
     % set start time
-    start_time = tic();    
+    start_time = tic();  
+    
+    % print info
+    if verbose
+        if ~isfield(problem, 'prox')
+            fprintf('GD: Iter = %03d, cost = %.24e, gnorm = %.4e, optgap = %.4e\n', iter, f_val, gnorm, optgap);
+        else
+            fprintf('PG: Iter = %03d, cost = %.24e, gnorm = %.4e, optgap = %.4e\n', iter, f_val, gnorm, optgap);
+        end
+    end      
 
     % main loop
     while (optgap > tol_optgap) && (gnorm > tol_gnorm) && (iter < max_iter)        
@@ -121,19 +143,37 @@ function [w, infos] = gd(problem, options)
             c1 = 1e-4;
             c2 = 0.9;
             step = strong_wolfe_line_search(problem, -grad, w, c1, c2);
+        elseif strcmp(step_alg, 'tfocs_backtracking') 
+            if iter > 0
+                alpha = 1.05;
+                beta = 0.5; 
+                step = tfocs_backtracking_search(step, w, w_old, grad, grad_old, alpha, beta);
+            else
+                step = step_init;
+            end
         else
         end
         
+        w_old = w;
         if strcmp(sub_mode, 'SCALING')
             % diagonal scaling            
-            h = problem.hess(w);
+            h = problem.full_hess(w);
             S = diag(1./diag(h));
+            
+            % update w
+            w = w - step * S * grad;  
+        else
+            % update w
+            w = w - step * grad;            
         end
         
-        % update w
-        w = w - step * S * grad;
+        % proximal operator
+        if isfield(problem, 'prox')
+            w = problem.prox(w, step);
+        end
         
         % calculate gradient
+        grad_old = grad;
         grad = problem.full_grad(w);
 
         % update iter        
@@ -154,13 +194,21 @@ function [w, infos] = gd(problem, options)
         infos.optgap = [infos.optgap optgap];        
         infos.cost = [infos.cost f_val];
         infos.gnorm = [infos.gnorm gnorm]; 
+        if isfield(problem, 'reg')
+            reg = problem.reg(w);
+            infos.reg = [infos.reg reg];
+        end        
         if store_w
             infos.w = [infos.w w];         
         end        
        
         % print info
         if verbose
-            fprintf('GD: Iter = %03d, cost = %.16e, gnorm = %.4e, optgap = %.4e\n', iter, f_val, gnorm, optgap);
+            if ~isfield(problem, 'prox')
+                fprintf('GD: Iter = %03d, cost = %.24e, gnorm = %.4e, optgap = %.4e\n', iter, f_val, gnorm, optgap);
+            else
+                fprintf('PG: Iter = %03d, cost = %.24e, gnorm = %.4e, optgap = %.4e\n', iter, f_val, gnorm, optgap);
+            end
         end        
     end
     

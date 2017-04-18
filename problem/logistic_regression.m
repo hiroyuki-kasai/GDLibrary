@@ -23,7 +23,7 @@ function [Problem] = logistic_regression(x_train, y_train, x_test, y_test, varar
 % This file is part of GDLibrary and SGDLibrary.
 %
 % Created by H.Kasai on Feb. 17, 2016
-% Modified by H.Kasai on Oct. 25, 2016
+% Modified by H.Kasai on Mar. 16, 2017
 
 
     if nargin < 5
@@ -39,13 +39,18 @@ function [Problem] = logistic_regression(x_train, y_train, x_test, y_test, varar
     Problem.name = @() 'logistic_regression';    
     Problem.dim = @() d;
     Problem.samples = @() n_train;
-    Problem.classes = @() 2;      
+    Problem.lambda = @() lambda;
+    Problem.classes = @() 2;  
+    Problem.hessain_w_independent = @() false;
+    Problem.x_norm = @() sum(x_train.^2,1);
+    Problem.x = @() x_train;
 
     Problem.cost = @cost;
     function f = cost(w)
-        % f = sum(log(1+exp(-y_train.*(w'*x_train)))/n_train,2)+ lambda * (w'*w) / 2; is replaced below 
+        %f_old = sum(log(1+exp(-y_train.*(w'*x_train)))/n_train,2)+ lambda * (w'*w) / 2; %is replaced below 
         % becasuse log(sigmoid(a)) = log(1/(1+exp(-a))) = log1 - log(1+exp(-a)) = -log(1+exp(-a)).
-        f = -sum(log(sigmoid(y_train.*(w'*x_train)))/n_train,2) + lambda * (w'*w) / 2;
+        %f = -sum(log(sigmoid(y_train.*(w'*x_train)))/n_train,2) + lambda * (w'*w) / 2;
+        f = -sum(log(sigmoid(y_train.*(w'*x_train))),2)/n_train + lambda * (w'*w) / 2;
     end
 
     Problem.cost_batch = @cost_batch;
@@ -67,7 +72,12 @@ function [Problem] = logistic_regression(x_train, y_train, x_test, y_test, varar
         % (log(sigmoid(y_train.*(w'*x_train)))' = y_train.*x_train * 1/sigmoid(y_train.*(w'*x_train)) * (sigmoid(y_train.*(w'*x_train)))'
         %   = y_train.*x_train * 1/sigmoid(y_train.*(w'*x_train)) * (- sigmoid(y_train.*(w'*x_train)) * (1 - sigmoid(y_train.*(w'*x_train))))
         %   = -y_train.*x_train * (1 - sigmoid(y_train.*(w'*x_train)))
-        g = -sum(ones(d,1) * y_train(indices).*x_train(:,indices) * (ones(1,length(indices))-sigmoid(y_train(indices).*(w'*x_train(:,indices))))',2)/length(indices)+ lambda * w;
+        %g_old = -sum(ones(d,1) * y_train(indices).*x_train(:,indices) * (ones(1,length(indices))-sigmoid(y_train(indices).*(w'*x_train(:,indices))))',2)/length(indices)+ lambda * w;
+        
+        e = exp(-1*y_train(indices)'.*(x_train(:,indices)'*w));
+        s = e./(1+e);
+        g = -(1/length(indices))*((s.*y_train(indices)')'*x_train(:,indices)')';
+        g = full(g) + lambda * w;
         
     end
 
@@ -115,6 +125,7 @@ function [Problem] = logistic_regression(x_train, y_train, x_test, y_test, varar
         
     end
 
+    %
     Problem.prediction = @prediction;
     function p = prediction(w)
         
@@ -135,16 +146,70 @@ function [Problem] = logistic_regression(x_train, y_train, x_test, y_test, varar
     end
 
     Problem.calc_solution = @calc_solution;
-    function w_opt = calc_solution(problem, maxiter)
+    function w_opt = calc_solution(problem, maxiter, method)
+        
+        if nargin < 3
+            method = 'lbfgs';
+        end        
         
         options.max_iter = maxiter;
         options.verbose = true;
         options.tol_optgap = 1.0e-24;
         options.tol_gnorm = 1.0e-16;
         options.step_alg = 'backtracking';
-        [w_opt,~] = gd(problem, options);
         
+        if strcmp(method, 'sg')
+            [w_opt,~] = gd(problem, options);
+        elseif strcmp(method, 'cg')
+            [w_opt,~] = ncg(problem, options);
+        elseif strcmp(method, 'newton')
+            options.sub_mode = 'INEXACT';    
+            options.step_alg = 'non-backtracking'; 
+            [w_opt,~] = newton(problem, options);
+        else 
+            options.step_alg = 'backtracking';  
+            options.mem_size = 5;
+            [w_opt,~] = lbfgs(problem, options);              
+        end
     end
+
+
+    %% for NIM
+    Problem.get_partial_samples = @get_partial_samples;
+    function [labels, samples] = get_partial_samples(indices)
+        samples = x_train(:,indices);
+        labels  = y_train(indices);
+    end
+
+    Problem.phi_prime = @phi_prime;
+    function [s] = phi_prime(w, indices)
+        e = exp(-1.0 * y_train(indices)' .* (x_train(:,indices)'*w));
+        s = e ./ (1.0+e);        
+    end
+
+    Problem.phi_double_prime = @phi_double_prime;
+    function [ss] = phi_double_prime(w, indices)
+        e = exp(-1.0 * y_train(indices)' .* (x_train(:,indices)'*w));
+        s = e ./ (1.0+e); 
+        ss = s .* (1.0 - s);
+    end
+
+
+    %% for Sub-sampled Newton
+    Problem.diag_based_hess = @diag_based_hess;
+    function h = diag_based_hess(w, indices, square_hess_diag)
+        X = x_train(:,indices)';
+        h = X' * diag(square_hess_diag) * X / length(indices) + lambda * eye(d);
+    end  
+
+    Problem.calc_square_hess_diag = @calc_square_hess_diag;
+    function square_hess_diag = calc_square_hess_diag(w, indices)
+        %hess_diag = 1./(1+exp(Y.*(X*w)))./(1+exp(-Y.*(X*w)));
+        Xw = x_train(:,indices)'*w;
+        y = y_train(indices)';
+        yXw = y .* Xw;
+        square_hess_diag = 1./(1+exp(yXw))./(1+exp(-yXw));
+    end    
 
 end
 

@@ -3,9 +3,9 @@
 
 Authors: [Hiroyuki Kasai](http://www.kasailab.com/)
 
-Last page update: November 4, 2016
+Last page update: April 18, 2017
 
-Latest library version: 1.0.0 (see Release notes for more info)
+Latest library version: 1.0.1 (see Release notes for more info)
 
 Introduction
 ----------
@@ -27,6 +27,8 @@ List of gradient algorithms available in GDLibrary
 - **BFGS**
     - Damped BFGS
 - **LBFGS** (limited-memory BFGS)
+- **AGD** (Accelerated gradient descent, i.e., Nesterov AGD)
+    - APG (Proximal AGD)
 
 List of line-search algorithms available in GDLibrary
 ---------
@@ -34,42 +36,36 @@ List of line-search algorithms available in GDLibrary
 - **Strong wolfe line search**
 - **Exact line search**
     - Only for quadratic problem.
+- **TFOCS-styole line search**
 
 Supported problems
 ---------
 * [Rosenbrock problem](https://en.wikipedia.org/wiki/Rosenbrock_function)
-* Quadratic problem
-* Multidimensional linear regression
-* Linear SVM
-* Logistic regression
-* Softmax classification (multinomial logistic regression)
+* [Quadratic problem](https://en.wikipedia.org/wiki/Quadratic_programming)
+* [Multidimensional linear regression](https://en.wikipedia.org/wiki/Linear_regressionSV)
+* Linear [SVM](https://en.wikipedia.org/wiki/Support_vector_machine) (Suppor vector machine)
+* [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)
+* Softmax classification ([multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression))
 * General form problem
+* Proximal type problems
+    - [Lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) (Least absolute shrinkage and selection operator) problem
+    - [Matrix completion](https://en.wikipedia.org/wiki/Matrix_completionlogi) problem with trace norm minimization 
+    - L1-norm logistic regression
 
 Folders and files
 ---------
-
-- run_me_first.m
-    - The script that you need to run first.
-
-- demo.m
-    - A demonstration script to check and understand this package easily. 
-                      
-- gd_solver/
-    - Contains various stochastic optimization algorithms.
-
-- problem/
-    - Problem definition files to be solved.
-
-- gd_test/
-    - Some helpful test script to use this package.
-
-- plotter/
-    - Contains plotting tools to show convergence results and various plots.
-                  
-- tool/
-    - Some utility tools for this project.
-                  
-                              
+<pre>
+./                      - Top directory.
+./README.md             - This readme file.
+./run_me_first.m        - The scipt that you need to run first.
+./demo.m                - Demonstration script to check and understand this package easily. 
+|plotter/               - Contains plotting tools to show convergence results and various plots.
+|tool/                  - Some auxiliary tools for this project.
+|gd_solver/             - Contains various stochastic optimization algorithms.
+|problem/               - Problem definition files to be solved.
+|gd_test/               - Some helpful test scripts to use this package.
+</pre>
+                                 
 
 First to do
 ----------------------------
@@ -164,6 +160,8 @@ If you have any problems or questions, please contact the author: [Hiroyuki Kasa
 Release Notes
 --------------
 
+* Version 1.0.1 (Apr. 18, 2017)
+    - New solvers (e.g., APG) and problems (e.g. Lasso) are added.
 * Version 1.0.0 (Nov. 04, 2016)
     - Initial version.
 

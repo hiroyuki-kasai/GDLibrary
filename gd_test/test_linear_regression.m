@@ -7,14 +7,14 @@ function  test_linear_regression()
     
     %% Set algorithms
     if 0
-        algorithms = solver_list('ALL');  
+        algorithms = gd_solver_list('ALL');  
     else           
-        algorithms = solver_list('BFGS'); 
+        algorithms = gd_solver_list('BFGS'); 
     end
 
      
     %% prepare dataset
-    if 1
+    if 0
         % generate synthtic data
         % sample data generating for training: y = w1*x1 + w2*x2 + ... * wd*1
         n = 10000;
