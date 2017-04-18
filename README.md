@@ -43,13 +43,13 @@ Supported problems
 * [Rosenbrock problem](https://en.wikipedia.org/wiki/Rosenbrock_function)
 * [Quadratic problem](https://en.wikipedia.org/wiki/Quadratic_programming)
 * [Multidimensional linear regression](https://en.wikipedia.org/wiki/Linear_regressionSV)
-* Linear [SVM](https://en.wikipedia.org/wiki/Support_vector_machine) (Suppor vector machine)
+* Linear [SVM](https://en.wikipedia.org/wiki/Support_vector_machine) (Support vector machine)
 * [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)
 * Softmax classification ([multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression))
 * General form problem
 * Proximal type problems
     - [Lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) (Least absolute shrinkage and selection operator) problem
-    - [Matrix completion](https://en.wikipedia.org/wiki/Matrix_completionlogi) problem with trace norm minimization 
+    - [Matrix completion](https://en.wikipedia.org/wiki/Matrix_completion) problem with trace norm minimization 
     - L1-norm logistic regression
 
 Folders and files
