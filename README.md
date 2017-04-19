@@ -1,7 +1,7 @@
 # GDLibrary : Gradient Descent Library in MATLAB
 ----------
 
-Authors: [Hiroyuki Kasai](http://www.kasailab.com/)
+Authors: [Hiroyuki Kasai](http://kasai.kasailab.com/)
 
 Last page update: April 19, 2017
 
@@ -16,37 +16,43 @@ Note that the [SGDLibrary](https://github.com/hiroyuki-kasai/SGDLibrary) interna
 List of gradient algorithms available in GDLibrary
 ---------
 - **GD** (gradient descent)
+    - Standard GD
     - Scaled GD
     - [Proximal GD](https://en.wikipedia.org/wiki/Proximal_gradient_method)
-- **CG** (linear conjugate gradient)
+- **[CG](https://en.wikipedia.org/wiki/Conjugate_gradient_method)** (linear conjugate gradient)
+    - Standard GD
     - Preconditioned CG
-- **NCG** (non-linear conjugate gradient)
+- **[NCG](https://en.wikipedia.org/wiki/Nonlinear_conjugate_gradient_method)** (non-linear conjugate gradient)
     - Fletcher-Reeves (FR), Polak-Ribiere (PR)
-- **Newton** (Netwon's algorithm)
-    - Damped Newton
-    - Cholesky factorizaion based Newton
-- **BFGS**
+- **[Newton](https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization)con** (Netwon's algorithm)
+    - Standard Netwon's algorithm
+    - Damped Newton's algorithm
+    - Cholesky factorizaion based Newton's algorithm
+- **[BFGS](https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm)**
+    - Standard BFGS
     - Damped BFGS
-- **LBFGS** (limited-memory BFGS)
+- **[LBFGS](https://en.wikipedia.org/wiki/Limited-memory_BFGS)** (limited-memory BFGS)
+    - Standard LBFGS
 - **AGD** (Accelerated gradient descent, i.e., Nesterov AGD)
-    - APG (Proximal AGD)
+    - AGD
+    - APG (Accelerated proximal GD)
 - **[FISTA](http://epubs.siam.org/doi/abs/10.1137/080716542)** (Fast iterative shrinkage-thresholding algorithm)
-- **CD** (Coodinate descent) **for Lasso and Elastic Net** 
+- **[CD](https://en.wikipedia.org/wiki/Coordinate_descent)** (Coodinate descent) **for Lasso and Elastic Net** 
 - **[ADMM](http://stanford.edu/~boyd/admm.html) for Lasso** (The alternating direction method of multipliers)
 
-List of line-search algorithms available in GDLibrary
+List of [line-search](https://en.wikipedia.org/wiki/Line_search) algorithms available in GDLibrary
 ---------
-- **Backtracking line search** (a.k.a Armijo condition)
-- **Strong wolfe line search**
+- **[Backtracking line search](https://en.wikipedia.org/wiki/Backtracking_line_search)** (a.k.a Armijo condition)
+- **[Strong wolfe line search](https://en.wikipedia.org/wiki/Wolfe_conditions)**
 - **Exact line search**
     - Only for quadratic problem.
-- **TFOCS-styole line search**
+- **TFOCS-style line search**
 
 Supported problems
 ---------
 * [Rosenbrock problem](https://en.wikipedia.org/wiki/Rosenbrock_function)
 * [Quadratic problem](https://en.wikipedia.org/wiki/Quadratic_programming)
-* [Multidimensional linear regression](https://en.wikipedia.org/wiki/Linear_regressionSV)
+* [Multidimensional linear regression](https://en.wikipedia.org/wiki/Linear_regressionSV) (Ridge regression, [Tikhonov regularization](https://en.wikipedia.org/wiki/Tikhonov_regularization))
 * Linear [SVM](https://en.wikipedia.org/wiki/Support_vector_machine) (Support vector machine)
 * [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)
 * Softmax classification ([multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression))
