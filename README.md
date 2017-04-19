@@ -24,7 +24,7 @@ List of gradient algorithms available in GDLibrary
     - Preconditioned CG
 - **[NCG](https://en.wikipedia.org/wiki/Nonlinear_conjugate_gradient_method)** (non-linear conjugate gradient)
     - Fletcher-Reeves (FR), Polak-Ribiere (PR)
-- **[Newton](https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization)con** (Netwon's algorithm)
+- **[Newton](https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization)** (Netwon's algorithm)
     - Standard Netwon's algorithm
     - Damped Newton's algorithm
     - Cholesky factorizaion based Newton's algorithm
@@ -46,7 +46,7 @@ List of [line-search](https://en.wikipedia.org/wiki/Line_search) algorithms avai
 - **[Strong wolfe line search](https://en.wikipedia.org/wiki/Wolfe_conditions)**
 - **Exact line search**
     - Only for quadratic problem.
-- **TFOCS-style line search**
+- **[TFOCS](http://cvxr.com/tfocs/)-style line search**
 
 Supported problems
 ---------
