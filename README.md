@@ -31,7 +31,7 @@ List of gradient algorithms available in GDLibrary
 - **AGD** (Accelerated gradient descent, i.e., Nesterov AGD)
     - APG (Proximal AGD)
 - **[FISTA](http://epubs.siam.org/doi/abs/10.1137/080716542)** (Fast iterative shrinkage-thresholding algorithm)
-- **CD for Lasso and Elastic Net** (Coodinate descent) 
+- **CD** (Coodinate descent) **for Lasso and Elastic Net** 
 - **[ADMM](http://stanford.edu/~boyd/admm.html) for Lasso** (The alternating direction method of multipliers)
 
 List of line-search algorithms available in GDLibrary
@@ -160,7 +160,7 @@ The GDLibrary is free and open source for academic/research purposes (non-commer
 
 Problems or questions
 ---------------------
-If you have any problems or questions, please contact the author: [Hiroyuki Kasai](http://www.kasailab.com/) (email: kasai **at** is **dot** uec **dot** ac **dot** jp)
+If you have any problems or questions, please contact the author: [Hiroyuki Kasai](http://kasai.kasailab.com/) (email: kasai **at** is **dot** uec **dot** ac **dot** jp)
 
 Release Notes
 --------------
