@@ -3,7 +3,7 @@
 
 Authors: [Hiroyuki Kasai](http://www.kasailab.com/)
 
-Last page update: April 18, 2017
+Last page update: April 19, 2017
 
 Latest library version: 1.0.1 (see Release notes for more info)
 
@@ -17,6 +17,7 @@ List of gradient algorithms available in GDLibrary
 ---------
 - **GD** (gradient descent)
     - Scaled GD
+    - [Proximal GD](https://en.wikipedia.org/wiki/Proximal_gradient_method)
 - **CG** (linear conjugate gradient)
     - Preconditioned CG
 - **NCG** (non-linear conjugate gradient)
@@ -29,6 +30,9 @@ List of gradient algorithms available in GDLibrary
 - **LBFGS** (limited-memory BFGS)
 - **AGD** (Accelerated gradient descent, i.e., Nesterov AGD)
     - APG (Proximal AGD)
+- **[FISTA](http://epubs.siam.org/doi/abs/10.1137/080716542)** (Fast iterative shrinkage-thresholding algorithm)
+- **CD for Lasso and Elastic Net** (Coodinate descent) 
+- **[ADMM](http://stanford.edu/~boyd/admm.html) for Lasso** (The alternating direction method of multipliers)
 
 List of line-search algorithms available in GDLibrary
 ---------
@@ -49,6 +53,7 @@ Supported problems
 * General form problem
 * Proximal type problems
     - [Lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) (Least absolute shrinkage and selection operator) problem
+    - [Elastic Net](https://en.wikipedia.org/wiki/Elastic_net_regularization) problem
     - [Matrix completion](https://en.wikipedia.org/wiki/Matrix_completion) problem with trace norm minimization 
     - L1-norm logistic regression
 
@@ -160,7 +165,7 @@ If you have any problems or questions, please contact the author: [Hiroyuki Kasa
 Release Notes
 --------------
 
-* Version 1.0.1 (Apr. 18, 2017)
+* Version 1.0.1 (Apr. 19, 2017)
     - New solvers (e.g., APG) and problems (e.g. Lasso) are added.
 * Version 1.0.0 (Nov. 04, 2016)
     - Initial version.
