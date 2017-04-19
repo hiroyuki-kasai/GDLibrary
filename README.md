@@ -38,7 +38,7 @@ List of gradient algorithms available in GDLibrary
     - APG (Accelerated proximal GD)
 - **[FISTA](http://epubs.siam.org/doi/abs/10.1137/080716542)** (Fast iterative shrinkage-thresholding algorithm)
 - **[CD](https://en.wikipedia.org/wiki/Coordinate_descent)** (Coodinate descent) **for Lasso and Elastic Net** 
-- **[ADMM](http://stanford.edu/~boyd/admm.html) for Lasso** (The alternating direction method of multipliers)
+- **[ADMM](http://stanford.edu/~boyd/admm.html)** (The alternating direction method of multipliers) **for Lasso**
 
 List of [line-search](https://en.wikipedia.org/wiki/Line_search) algorithms available in GDLibrary
 ---------
