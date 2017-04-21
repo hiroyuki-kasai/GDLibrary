@@ -70,6 +70,7 @@ Folders and files
 ./README.md             - This readme file.
 ./run_me_first.m        - The scipt that you need to run first.
 ./demo.m                - Demonstration script to check and understand this package easily. 
+./demo_lasso_cv.m       - Demonstration script for lasso problem with cross validation. 
 |plotter/               - Contains plotting tools to show convergence results and various plots.
 |tool/                  - Some auxiliary tools for this project.
 |problem/               - Problem definition files to be solved.
