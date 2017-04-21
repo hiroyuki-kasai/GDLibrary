@@ -20,8 +20,8 @@ function [] = demo_lasso_cv()
     %% initialize
     % define parameters for cross-validation
     num_cv = 10;
-    lamda_unit = lambda_max/num_cv;
-    lambda_array = 0+lamda_unit:lamda_unit:lambda_max;
+    lambda_unit = lambda_max/num_cv;
+    lambda_array = 0+lambda_unit:lambda_unit:lambda_max;
     
     % set options
     options.w_init = zeros(n,1); 
