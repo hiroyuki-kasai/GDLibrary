@@ -158,9 +158,9 @@ draw_convergence_sequence(problem, w_opt, {'GD-BKT', 'NCG-BKT', 'LBFGS-WOLFE'}, 
 <br /><br />
 
 
-Usage example 2 (Lasso problem with cross-validation)
+Usage example 2 ([Lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) problem with cross-validation)
 ----------------------------
-Now, just execute `demo_lass_cv` for demonstration of this package.
+Now, just execute `demo_lasso_cv` for demonstration of this package.
 
 ```Matlab
 %% Execute the demonstration script
@@ -179,7 +179,7 @@ b = randn(d,1);
 lambda_max = norm(A'*b, 'inf');
 
 
-%% set algorithms and solver
+%% set algorithms and solver (e.g., FISTA)
 algorithm = {'FISTA'};
 
 
@@ -220,6 +220,11 @@ display_graph('l1','aprox_err', algorithm, l1_norm, {aprox_err}, 'linear');
 end  
 
 ```
+
+* Output results 
+
+<img src="https://dl.dropboxusercontent.com/u/869853/github/GDLibrary/images/lasso_cv.png" width="900">
+<br /><br />
 
 
 License
