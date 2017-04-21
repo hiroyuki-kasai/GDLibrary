@@ -72,8 +72,8 @@ Folders and files
 ./demo.m                - Demonstration script to check and understand this package easily. 
 |plotter/               - Contains plotting tools to show convergence results and various plots.
 |tool/                  - Some auxiliary tools for this project.
-|gd_solver/             - Contains various stochastic optimization algorithms.
 |problem/               - Problem definition files to be solved.
+|gd_solver/             - Contains various gradient descent optimization algorithms.
 |gd_test/               - Some helpful test scripts to use this package.
 </pre>
                                  
@@ -86,7 +86,7 @@ Run `run_me_first` for path configurations.
 run_me_first; 
 ```
 
-Usage example 1 (Rosenbrock problem)
+Usage example 1 ([Rosenbrock problem](https://en.wikipedia.org/wiki/Rosenbrock_function))
 ----------------------------
 Now, just execute `demo` for demonstration of this package.
 ```Matlab
@@ -158,7 +158,7 @@ draw_convergence_sequence(problem, w_opt, {'GD-BKT', 'NCG-BKT', 'LBFGS-WOLFE'}, 
 <br /><br />
 
 
-Usage example 2 ([Lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) problem with cross-validation)
+Usage example 2 ([Lasso problem](https://en.wikipedia.org/wiki/Lasso_(statistics)) with cross-validation)
 ----------------------------
 Now, just execute `demo_lasso_cv` for demonstration of this package.
 
