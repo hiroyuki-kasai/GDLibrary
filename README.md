@@ -86,7 +86,7 @@ Run `run_me_first` for path configurations.
 run_me_first; 
 ```
 
-Usage example (Rosenbrock problem)
+Usage example 1 (Rosenbrock problem)
 ----------------------------
 Now, just execute `demo` for demonstration of this package.
 ```Matlab
@@ -120,7 +120,7 @@ options.store_w = true;
 options.step_alg = 'backtracking';
 [w_gd, info_list_gd] = gd(problem, options); 
 
-%% perform GD with backtracking line search 
+%% perform NCG with backtracking line search 
 options.step_alg = 'backtracking';
 [w_ncg, info_list_ncd] = ncg(problem, options);     
 
@@ -157,6 +157,66 @@ draw_convergence_sequence(problem, w_opt, {'GD-BKT', 'NCG-BKT', 'LBFGS-WOLFE'}, 
 <img src="https://dl.dropboxusercontent.com/u/869853/github/GDLibrary/images/rosenbrock_convergence.png" width="900">
 <br /><br />
 
+
+Usage example 2 (Lasso problem with cross-validation)
+----------------------------
+Now, just execute `demo_lass_cv` for demonstration of this package.
+```Matlab
+%% Execute the demonstration script
+demo_lass_cv; 
+```
+
+The "**demo_lass_cv.m**" file contains below.
+```Matlab
+function [] = demo_lasso_cv()
+
+%% prepare dataset
+n = 128; 
+d = 10;         
+A = randn(d,n);
+b = randn(d,1);
+lambda_max = norm(A'*b, 'inf');
+
+%% set algorithms and solver
+algorithm = {'FISTA'};
+
+
+%% initialize
+% define parameters for cross-validation
+num_lambda = 10;
+lamda_unit = lambda_max/num_lambda;
+lamnda_array = 0+lamda_unit:lamda_unit:lambda_max;
+len = length(lamnda_array);
+
+% set options
+options.w_init = zeros(n,1); 
+
+% prepare arrays for solutions
+W = zeros(n, num_lambda);
+l1_norm = zeros(num_lambda,1);    
+aprox_err = zeros(num_lambda,1);  
+
+
+%% perform cross-validations
+for i=1:len
+    lambda = lamnda_array(i);
+    problem = lasso(A, b, lambda);
+
+    [W(:,i), infos] = fista(problem, options);
+    l1_norm(i) = infos.reg(end);
+    aprox_err(i) = infos.cost(end);
+end
+
+
+% display l1-norm vs coefficient
+display_graph('l1','coeff', algorithm, l1_norm, {W}, 'linear');
+% display lambda vs coefficient
+display_graph('lambda','coeff', algorithm, lamnda_array, {W}, 'linear');
+% display l1-norm vs approximation error
+display_graph('l1','aprox_err', algorithm, l1_norm, {aprox_err}, 'linear');    
+
+end
+```
 
 
 License
