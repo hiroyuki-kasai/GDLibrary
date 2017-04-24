@@ -15,10 +15,9 @@ Note that the [SGDLibrary](https://github.com/hiroyuki-kasai/SGDLibrary) interna
 
 List of gradient algorithms available in GDLibrary
 ---------
-- **GD** (gradient descent)
+- **[GD](https://en.wikipedia.org/wiki/Gradient_descent)** (gradient descent)
     - Standard GD
     - Scaled GD
-    - [Proximal GD](https://en.wikipedia.org/wiki/Proximal_gradient_method)
 - **[CG](https://en.wikipedia.org/wiki/Conjugate_gradient_method)** (linear conjugate gradient)
     - Standard GD
     - Preconditioned CG
@@ -34,11 +33,7 @@ List of gradient algorithms available in GDLibrary
 - **[LBFGS](https://en.wikipedia.org/wiki/Limited-memory_BFGS)** (limited-memory BFGS)
     - Standard LBFGS
 - **AGD** (Accelerated gradient descent, i.e., Nesterov AGD)
-    - AGD
-    - APG (Accelerated proximal GD)
-- **[FISTA](http://epubs.siam.org/doi/abs/10.1137/080716542)** (Fast iterative shrinkage-thresholding algorithm)
-- **[CD](https://en.wikipedia.org/wiki/Coordinate_descent)** (Coodinate descent) **for Lasso and Elastic Net** 
-- **[ADMM](http://stanford.edu/~boyd/admm.html)** (The alternating direction method of multipliers) **for Lasso**
+    - Standard AGD
 
 List of [line-search](https://en.wikipedia.org/wiki/Line_search) algorithms available in GDLibrary
 ---------
@@ -57,11 +52,6 @@ Supported problems
 * [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)
 * Softmax classification ([multinomial logistic regression](https://en.wikipedia.org/wiki/Multinomial_logistic_regression))
 * General form problem
-* Proximal type problems
-    - [Lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) (Least absolute shrinkage and selection operator) problem
-    - [Elastic Net](https://en.wikipedia.org/wiki/Elastic_net_regularization) problem
-    - [Matrix completion](https://en.wikipedia.org/wiki/Matrix_completion) problem with trace norm minimization 
-    - L1-norm logistic regression
 
 Folders and files
 ---------
@@ -159,74 +149,6 @@ draw_convergence_sequence(problem, w_opt, {'GD-BKT', 'NCG-BKT', 'LBFGS-WOLFE'}, 
 <br /><br />
 
 
-Usage example 2 ([Lasso problem](https://en.wikipedia.org/wiki/Lasso_(statistics)) with cross-validation)
-----------------------------
-Now, just execute `demo_lasso_cv` for demonstration of this package.
-
-```Matlab
-%% Execute the demonstration script
-demo_lass_cv; 
-```
-
-The "**demo_lass_cv.m**" file contains below.
-```Matlab
-function [] = demo_lasso_cv()
-
-%% prepare dataset
-n = 128; 
-d = 10;         
-A = randn(d,n);
-b = randn(d,1);
-lambda_max = norm(A'*b, 'inf');
-
-
-%% set algorithms and solver (e.g., FISTA)
-algorithm = {'FISTA'};
-
-
-%% initialize
-% define parameters for cross-validation
-num_cv = 10;
-lambda_unit = lambda_max/num_cv;
-lambda_array = 0+lambda_unit:lambda_unit:lambda_max;
-
-% set options
-options.w_init = zeros(n,1); 
-
-% prepare arrays for solutions
-W = zeros(n, num_cv);
-l1_norm = zeros(num_cv,1);    
-aprox_err = zeros(num_cv,1);  
-
-
-%% perform cross-validations
-for i=1:length(lambda_array)
-    lambda = lambda_array(i);
-    problem = lasso(A, b, lambda);
-
-    [W(:,i), infos] = fista(problem, options);
-    l1_norm(i) = infos.reg(end);
-    aprox_err(i) = infos.cost(end);
-end
-
-
-%% plot all
-% display l1-norm vs. coefficient
-display_graph('l1','coeff', algorithm, l1_norm, {W}, 'linear');
-% display lambda vs. coefficient
-display_graph('lambda','coeff', algorithm, lambda_array, {W}, 'linear');
-% display l1-norm vs. approximation error
-display_graph('l1','aprox_err', algorithm, l1_norm, {aprox_err}, 'linear');
-
-end  
-
-```
-
-* Output results 
-
-<img src="https://dl.dropboxusercontent.com/u/869853/github/GDLibrary/images/lasso_cv.png" width="900">
-<br /><br />
-
 
 License
 -------
@@ -241,7 +163,7 @@ Release Notes
 --------------
 
 * Version 1.0.1 (Apr. 19, 2017)
-    - New solvers (e.g., APG) and problems (e.g. Lasso) are added.
+    - New solvers and problems are added.
 * Version 1.0.0 (Nov. 04, 2016)
     - Initial version.
 

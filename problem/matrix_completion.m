@@ -1,17 +1,16 @@
-function [Problem] = trace_norm_matrix_completion(A, mask, lambda)
-% This file defines a matrix completion problem with trace (nuclear) norm minimization. 
+function [Problem] = matrix_completion(A, mask, lambda)
+% This file defines a matrix completion problem. 
 %
 % Inputs:
 %       A           Full observation matrix. A.*mask is to be completed. 
 %       mask        Linear operator to extract existing elements, denoted as P_omega( ).
-%       lambda      l1-regularized parameter. 
 % Output:
 %       Problem     problem instance. 
 %
 %
 % The problem of interest is defined as
 %
-%           min f(w) =  1/2 ||P_omega(W) - P_omega(A)||_2^2 + lambda * ||X||_*,
+%           min f(w) =  1/2 * ||P_omega(W) - P_omega(A)||_2^2 + 1/2 * lambda * ||X||_2^2,
 %
 % "w" is the model parameter of size mxn vector, which is transformed to matrix W of size [m, n]. 
 %
@@ -27,29 +26,15 @@ function [Problem] = trace_norm_matrix_completion(A, mask, lambda)
     Problem.name = @() 'matrix completion';  
     Problem.dim = @() m*n;
     Problem.samples = @() n;
-    Problem.lambda = @() lambda;
-    
-    Problem.prox = @trace_norm;
-    function v = trace_norm(w, t)
-        v = svd_shrink(w, t * lambda, [m n]);
-    end    
+    Problem.lambda = @() lambda;    
+  
 
     Problem.cost = @cost;
     function f = cost(w)
         L = reshape(w, [m n]);
         diff = (L - A.*mask) .* (A.*mask ~= 0);
-        trace_norm = reg(w);
 
-        f = 1/2 * norm(diff, 'fro') + lambda * trace_norm;
-    end
-
-    % calculate trace norm
-    Problem.reg = @reg;
-    function r = reg(w)
-        L = reshape(w, [m n]);
-        [~,S,~] = svd(L,'econ');
-        s = diag(S);
-        r = sum(s);
+        f = 1/2 * norm(diff, 'fro') + 1/2 * lambda * norm(w)^2;
     end
 
     Problem.cost_batch = @cost_batch;
@@ -61,7 +46,7 @@ function [Problem] = trace_norm_matrix_completion(A, mask, lambda)
     function g = full_grad(w)
         L = reshape(w, [m n]);
         G = (L - A.*mask) .* (A.*mask ~= 0);
-        g = G(:);
+        g = G(:) + lambda * w;
     end
 
     Problem.grad = @grad;

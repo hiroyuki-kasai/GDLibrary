@@ -1,4 +1,4 @@
-function [] = test_trace_norm_mc()
+function [] = test_matrix_completion()
 
     clc;
     clear;
@@ -11,27 +11,23 @@ function [] = test_trace_norm_mc()
     if 0
         algorithms = gd_solver_list('ALL');  
     else
-        %algorithms = {'PG-BKT', 'PG-TFOCS-BKT', 'APG-BKT', 'APG-TFOCS-BKT', 'L-BFGS-BKT'};      
-        algorithms = {'PG-TFOCS-BKT', 'APG-TFOCS-BKT', 'L-BFGS-BKT'}; 
+        algorithms = {'GD-BKT', 'L-BFGS-BKT'}; 
     end    
     
     
     %% prepare dataset
-    if 1
-        % generate synthtic data        
-        n = 100; 
-        m = 50; 
-        r = 10; 
-        density = 0.2; 
-        lambda = 5;
-        M = randn(m,r)*randn(r,n); 
-        mask = (rand(m,n)<density);
-    else
-    end
+    n = 500; 
+    m = 100; 
+    r = 5; 
+    lambda = 0.1;
+    density = 0.3; 
+    M = randn(m,r)*randn(r,n)  + 0.01 * randn(m, n); 
+    mask = (rand(m,n)<density);
+
     
     
     %% define problem definitions
-    problem = trace_norm_matrix_completion(M, mask, lambda);
+    problem = matrix_completion(M, mask, lambda);
 
     
     %% initialize
@@ -52,29 +48,17 @@ function [] = test_trace_norm_mc()
         options.verbose = true;  
 
         switch algorithms{alg_idx}
-            case {'PG-BKT'}
+            case {'GD-BKT'}
                 
                 options.step_alg = 'backtracking';
-                options.step_init_alg = 'bb_init';
                 [w_list{alg_idx}, info_list{alg_idx}] = gd(problem, options);
                 
-            case {'PG-TFOCS-BKT'}
+            case {'NCG-BKT'}
                 
-                options.step_alg = 'tfocs_backtracking';
-                options.step_init_alg = 'bb_init';
-                [w_list{alg_idx}, info_list{alg_idx}] = gd(problem, options);     
-                
-            case {'APG-BKT'}
-                
-                options.step_alg = 'backtracking';
-                options.step_init_alg = 'bb_init';
-                [w_list{alg_idx}, info_list{alg_idx}] = gd_nesterov(problem, options);
-                
-            case {'APG-TFOCS-BKT'}
-                
-                options.step_alg = 'tfocs_backtracking';
-                options.step_init_alg = 'bb_init';
-                [w_list{alg_idx}, info_list{alg_idx}] = gd_nesterov(problem, options);  
+                options.sub_mode = 'STANDARD';                
+                options.step_alg = 'backtracking';      
+                options.beta_alg = 'PR';                
+                [w_list{alg_idx}, info_list{alg_idx}] = ncg(problem, options);     
                 
             case {'L-BFGS-BKT'}
                 
@@ -104,7 +88,5 @@ function [] = test_trace_norm_mc()
     
     % display iter vs. cost
     display_graph('iter','cost', algorithms, w_list, info_list);
-    % display iter vs. trace (nuclear) norm
-    display_graph('iter','reg', algorithms, w_list, info_list); 
 end
 

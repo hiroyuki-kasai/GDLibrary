@@ -129,8 +129,9 @@ function [w, infos] = lbfgs(problem, options)
     % set direction
     % Set the identity matrix to the initial inverse-Hessian-matrix
     % The first step is in the steepest descent direction
-    InvHess = eye(d);
-    p = - InvHess * grad;    
+    %InvHess = eye(d);
+    %p = - InvHess * grad;    
+    p = - grad; 
     
     % prepare array
     s_array = [];
