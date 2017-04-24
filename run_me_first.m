@@ -6,6 +6,10 @@ cd gd_solver/;
 addpath(genpath(pwd));
 cd ..;
 
+cd line_search/;
+addpath(genpath(pwd));
+cd ..;
+
 cd problem/;
 addpath(genpath(pwd));
 cd ..;
