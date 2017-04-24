@@ -27,7 +27,7 @@ List of gradient algorithms available in GDLibrary
     - Standard Netwon's algorithm
     - Damped Newton's algorithm
     - Cholesky factorizaion based Newton's algorithm
-- **[BFGS](https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm)**
+- **[BFGS](https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm)** (Broyden?Fletcher?Goldfarb?Shanno algorithm)
     - Standard BFGS
     - Damped BFGS
 - **[LBFGS](https://en.wikipedia.org/wiki/Limited-memory_BFGS)** (limited-memory BFGS)
