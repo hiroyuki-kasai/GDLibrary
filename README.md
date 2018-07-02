@@ -141,10 +141,10 @@ draw_convergence_sequence(problem, w_opt, {'GD-BKT', 'NCG-BKT', 'LBFGS-WOLFE'}, 
 
 * Output results 
 
-<img src="http://www.kasailab.com/Public/Github/GDLibrary/images/rosenbrock_cost_gnorm.png" width="900">
+<img src="http://www.kasailab.com/public/github/GDLibrary/images/rosenbrock_cost_gnorm.png" width="900">
 <br /><br />
 
-<img src="http://www.kasailab.com/Public/Github/GDLibrary/images/rosenbrock_convergence.png" width="900">
+<img src="http://www.kasailab.com/public/github/GDLibrary/images/rosenbrock_convergence.png" width="900">
 <br /><br />
 
 
